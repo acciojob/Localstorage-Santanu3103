@@ -16,19 +16,137 @@
   <div class="wrapper">
     <h2>LOCAL TAPAS</h2>
     <p></p>
-    <ul class="plates">
+    <ul class="plates todo_items">
       <li>Loading Tapas...</li>
     </ul>
-    <form class="add-items">
-      <input type="text" name="item" placeholder="Item Name" required>
-      <input type="submit" value="+ Add Item">
+    <form class="add-items todo_form">
+      <input type="text" name="item" placeholder="Item Name" required id="input">
+      <input type="submit" value="+ Add Item" id="submit">
     </form>
   </div>
 
 <script>
-  const addItems = document.querySelector('.add-items');
-  const itemsList = document.querySelector('.plates');
-  const items = [];
+  // select the todo-form
+  const todoForm = document.querySelector('.add-items');
+  // select the <ul> with class="todo-items"
+  const todoItemsList = document.querySelector('.plates');
+  // select the input box
+  const todoInput = document.querySelector("#input");
+
+// array which stores every todos
+let items = [];
+
+  todoForm.addEventListener('submit', (event)=>{ // add an eventListener on form, and listen for submit event
+    
+    event.preventDefault(); // prevent the page from reloading when submitting the form
+
+    addTodo(todoInput.value); // call addTodo function with input box current value
+
+  });
+
+
+function addTodo(item) { // function to add todo
+
+  if (item !== '') {
+    // make a todo object, which has id, name, and completed properties
+    const todo = { id: Date.now(), name: item, completed: false };
+
+          items.push(todo); // then add it to todos array
+
+         addToLocalStorage(todos); // then store it in localStorage
+
+         todoInput.value = ''; // finally clear the input box value
+  }
+}
+
+
+function renderTodos(todos) { // function to render given todos to screen
+ 
+  todoItemsList.innerHTML = '';
+
+  items.forEach(function(item) {  // check if the item is completed
+   
+    const checked = item.completed ? 'checked': null;
+
+    const li = document.createElement('li');
+   
+    li.setAttribute('class', 'item');
+
+    li.setAttribute('data-key', item.id);
+   
+    if (item.completed === true) {
+      li.classList.add('checked');
+    }
+
+    li.innerHTML = `
+          <input type="checkbox" class="checkbox" ${checked}>
+          ${item.name}
+          <button class="delete-button">X</button>
+        `;
+   
+    todoItemsList.append(li);
+  });
+}
+
+// function to add todos to local storage
+  function addToLocalStorage(items) {
+    
+    localStorage.setItem('items', JSON.stringify(items));
+    
+    renderTodos(items);
+  }
+
+function getFromLocalStorage() {
+  const hasitem = localStorage.getItem('items');
+
+  if (hasitem) {
+
+    todos = JSON.parse(hasitem);
+    renderTodos(items);
+
+  }
+}
+
+// toggle the value to completed and not completed
+function toggle(id) {
+  todos.forEach((item)=>{
+   
+      if (item.id == id) {
+        item.completed = !item.completed;
+      }
+
+  });
+
+   addToLocalStorage(items);
+}
+
+// delete from  array, then updates localstorage and renders updated list to screen
+function deleteTodo(id) {
+
+  items = items.filter((item)=> {
+
+    return item.id != id;
+    
+  });
+
+  addToLocalStorage(items);
+}
+
+getFromLocalStorage();
+
+todoItemsList.addEventListener('click', function(event) {
+  // check if the event is on checkbox
+  if (event.target.type === 'checkbox') {
+    // toggle the state
+    toggle(event.target.parentElement.getAttribute('data-key'));
+  }
+// check if that is a delete-button
+  if (event.target.classList.contains('delete-button')) {
+    // get id from data-key attribute's value of parent <li> where the delete-button is present
+    deleteTodo(event.target.parentElement.getAttribute('data-key'));
+  }
+});
+
 
 </script>
 
