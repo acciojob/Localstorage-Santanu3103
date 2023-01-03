@@ -50,7 +50,7 @@ function addTodo(item) { // function to add todo
 
   if (item !== '') {
     // make a todo object, which has id, name, and completed properties
-    const todo = { id: Date.now(), name: item, completed: false };
+    const todo = { id: Date.now(), name: item, done: false };
 
           items.push(todo); // then add it to todos array
 
@@ -65,16 +65,14 @@ function renderTodos(items) { // function to render given todos to screen
  
   todoItemsList.innerHTML = '';
 
-  items.forEach(function(item) {  // check if the item is completed
+  items.forEach(function(plate) {  // check if the item is completed
    
-    const checked = item.completed ? 'checked': null; //if  completed = ture then store
+    const done = plate.done ? 'checked': null; //if  completed = ture then store
 
     const li = document.createElement('li');
         
           li.setAttribute('class', 'item');
-
-          li.setAttribute('data-key', item.id);
-        
+     
           if (item.completed === true) {
             li.classList.add('checked');
           }
@@ -84,6 +82,8 @@ function renderTodos(items) { // function to render given todos to screen
                 <label for="checkbox">
                 ${item.name}
                 </label>
+                <input type="checkbox" data-index=${index} id="item${index}" ${plate.done ? 'checked' : ''} />
+               <label for="item${index}"><!-- plate text --></label>
                 <button class="delete-button">X</button>
               `;
    
@@ -112,11 +112,11 @@ function getFromLocalStorage() {
 getFromLocalStorage();
 // toggle the value to completed and not completed
 function toggle(id) {
-  items.forEach((item)=>{
+  items.forEach((plate)=>{
    
-      if (item.id == id) {
+      if (plate.id == id) {
 
-        item.completed = !item.completed;
+        plate.completed = !plate.completed;
 
       }
 
@@ -128,9 +128,9 @@ function toggle(id) {
 // delete from  array, then updates localstorage and renders updated list to screen
 function deleteTodo(id) {
 
-  items = items.filter((item)=> {
+  items = items.filter((plate)=> {
 
-    return   item.completed = !item.completed;
+    return   plate.done = !plate.done;
     
   });
 
@@ -143,12 +143,12 @@ todoItemsList.addEventListener('click', function(event) {
   // check if the event is on checkbox
     if (event.target.type === 'checkbox') {
       // toggle the state
-      toggle(event.target.parentElement.getAttribute('data-key'));
+      toggle(event.target.parentElement.getAttribute('data-index'));
     }
   // check if that is a delete-button
     if (event.target.classList.contains('delete-button')) {
-      // get id from data-key attribute's value of parent <li> where the delete-button is present
-      deleteTodo(event.target.parentElement.getAttribute('data-key'));
+      // get id from data-index attribute's value of parent <li> where the delete-button is present
+      deleteTodo(event.target.parentElement.getAttribute('data-index'));
     }
 });
 
