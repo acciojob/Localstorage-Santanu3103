@@ -22,6 +22,7 @@
     <form class="add-items">
       <input type="text" name="item" placeholder="Item Name" required id="input">
       <input type="submit" value="+ Add Item" id="submit">
+     
     </form>
   </div>
 
@@ -80,7 +81,9 @@ function renderTodos(items) { // function to render given todos to screen
 
           li.innerHTML = `
                 <input type="checkbox" class="checkbox" ${checked}>
+                <label for="checkbox">
                 ${item.name}
+                </label>
                 <button class="delete-button">X</button>
               `;
    
@@ -127,7 +130,7 @@ function deleteTodo(id) {
 
   items = items.filter((item)=> {
 
-    return item.id != id;
+    return   item.completed = !item.completed;
     
   });
 

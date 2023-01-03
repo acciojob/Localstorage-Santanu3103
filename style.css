@@ -60,12 +60,12 @@ h2 {
   display: block;
 }
 
-.plates li + label:before {
+.plates input + label:before {
   content: "⬜️";
   margin-right: 10px;
 }
 
-.plates li :checked + label:before {
+.plates input:checked + label:before {
   content: "🌮";
 }
 
@@ -75,7 +75,7 @@ h2 {
 
 .add-items input {
   padding: 10px;
-  outline: 2px;
+  outline: 2;
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
