@@ -16,10 +16,10 @@
   <div class="wrapper">
     <h2>LOCAL TAPAS</h2>
     <p></p>
-    <ul class="plates todo_items">
+    <ul class="plates">
       <li>Loading Tapas...</li>
     </ul>
-    <form class="add-items todo_form">
+    <form class="add-items">
       <input type="text" name="item" placeholder="Item Name" required id="input">
       <input type="submit" value="+ Add Item" id="submit">
     </form>
@@ -66,6 +66,8 @@ function renderTodos(items) { // function to render given todos to screen
 
   items.forEach(function(item) {  // check if the item is completed
    
+    const checked = item.completed ? 'checked': null; //if  completed = ture then store
+
     const li = document.createElement('li');
         
           li.setAttribute('class', 'item');
@@ -77,7 +79,7 @@ function renderTodos(items) { // function to render given todos to screen
           }
 
           li.innerHTML = `
-                <input type="checkbox" class="checkbox">
+                <input type="checkbox" class="checkbox" ${checked}>
                 ${item.name}
                 <button class="delete-button">X</button>
               `;
