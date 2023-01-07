@@ -57,7 +57,7 @@ h2 {
 }
 
 .plates input {
-  display: block;
+  display: none;
 }
 
 .plates input + label:before {
